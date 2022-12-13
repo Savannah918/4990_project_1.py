@@ -9,7 +9,7 @@ def func(x): # Objective function
     return (1 - x[0])**2 + 100*(x[0]**2 - x[1])**2 + (1 - x[1])**2 + 100*(x[1]**2 - x[2])**2
 # def grad_func(x): # Objective function
 #     return numpy.array([4*x[0]**3-4*x[0]*x[1]+2*x[0]-2, -2*x[0]**2+2*x[1]])
-
+# NEW VERSIONNNN
 def Hager_Zhang(Xj, tol, alpha_1, alpha_2):
     x = numpy.zeros((len(Xj), 1))
     for i in range(len(Xj)):
