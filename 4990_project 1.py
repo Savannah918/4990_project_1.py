@@ -5,7 +5,7 @@ NORM = numpy.linalg.norm
 import numdifftools as nd
 import matplotlib.pyplot as plt
 
-print('haha')
+print('hahahahaha')
 def func(x): # Objective function
     # return x[0]**4 - 2*x[0]**2*x[1] + x[0]**2 + x[1]**2 - 2*x[0] + 1
     return (1 - x[0])**2 + 100*(x[0]**2 - x[1])**2 + (1 - x[1])**2 + 100*(x[1]**2 - x[2])**2
