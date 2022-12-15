@@ -3,15 +3,18 @@ from scipy.optimize import line_search
 import numpy as np
 NORM = np.linalg.norm
 import numdifftools as nd
+import matplotlib.pyplot as plt
 pi = np.pi
 
 ## we need to evaluate the 'conjugate' property
-
+true_sol = np.array([1, 1, 1])
 def func(x): # Objective function
-    return 10*len(x) + sum(s**2-10*np.cos(2*pi*s) for s in x)                                 #Rastrigin
-    return 0.5 + ((np.sin(x[0]**2-x[1]**2))**2-0.5) / (1+0.001*(x[0]**2+x[1]**2))**2             #Schaffer
-    return 1 + 1/4000 * (x[0]**2+x[1]**2) - np.cos(x[0])*np.cos(x[1]/np.sqrt(2))                   #Griewank
+    #return 10*len(x) + sum(s**2-10*np.cos(2*pi*s) for s in x)                                 #Rastrigin
+    #return 0.5 + ((np.sin(x[0]**2-x[1]**2))**2-0.5) / (1+0.001*(x[0]**2+x[1]**2))**2             #Schaffer
+    #return 1 + 1/4000 * (x[0]**2+x[1]**2) - np.cos(x[0])*np.cos(x[1]/np.sqrt(2))                   #Griewank
     return (1 - x[0])**2 + 100*(x[0]**2 - x[1])**2 + (1 - x[1])**2 + 100*(x[1]**2 - x[2])**2         #Rosenbrock
+
+
 # def grad_func(x): # Objective function
 #     return numpy.array([4*x[0]**3-4*x[0]*x[1]+2*x[0]-2, -2*x[0]**2+2*x[1]])
 
@@ -23,8 +26,10 @@ def Hager_Zhang(Xj, tol, alpha_1, alpha_2):
     D = grad_func(Xj)  #First Gradient
     delta = -D
     iter = 0
+    converge = []
     while True:
         iter+=1
+        converge.append(NORM(true_sol - Xj))
         start_point = Xj # Start point for step length selection 
         beta = line_search(f=func, myfprime=grad_func, xk=start_point, pk=delta, c1=alpha_1, c2=alpha_2)[0] # Selecting the step length
         if beta!=None:
@@ -33,7 +38,12 @@ def Hager_Zhang(Xj, tol, alpha_1, alpha_2):
         if np.linalg.norm(grad_func(X)) < tol:
             for i in range(len(Xj)):
                 x[i] += [Xj[i], ]
-                print("iter:", iter)
+            print("iter:", iter)
+            plt.plot(range(iter), converge)
+            plt.xlabel("Number of iterations")
+            plt.ylabel("Error norm")
+            plt.title(Initial_data)
+            plt.show()
             return X, func(X)
         else:
             Xj = X
@@ -49,6 +59,6 @@ def Hager_Zhang(Xj, tol, alpha_1, alpha_2):
             for i in range(len(Xj)):
                 x[i] += [Xj[i], ]
 
-Initial_data = [5,5]
+Initial_data = np.random.rand(3) * -1 
 x,func_val = Hager_Zhang(Initial_data, 10**-6, 10**-4, 0.2)
 print(x, func_val)
